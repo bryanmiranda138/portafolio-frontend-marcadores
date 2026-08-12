@@ -5,7 +5,7 @@ import './App.css';
 // ⚠️ IMPORTANTE: 
 // Mientras pruebas en tu computadora, usa localhost:4000
 // Cuando lo subas a internet, cámbialo por tu URL de Render (ej. 'https://tu-backend.onrender.com')
-const SOCKET_URL = 'http://localhost:4000'; 
+const SOCKET_URL = 'https://api-marcadores-sv.onrender.com'; 
 const socket = io(SOCKET_URL);
 
 function App() {
