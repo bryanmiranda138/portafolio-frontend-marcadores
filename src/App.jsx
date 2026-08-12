@@ -32,35 +32,50 @@ function TarjetaPartido({ partido }) {
 
   return (
     <div className={`tarjeta-partido ${hayGol ? 'animacion-gol' : ''}`}>
-      <div className="tiempo-partido">
-        <span className="minuto-pulsante">{partido.minuto}</span>
-      </div>
-      
-      <div className="marcador-equipos">
-        <span className="equipo">{partido.local}</span>
-        <span className="goles">{partido.golesLocal} - {partido.golesVisitante}</span>
-        <span className="equipo">{partido.visitante}</span>
+      {/* 1. Cabecera del contenedor: Minuto y Estado */}
+      <div className="tarjeta-header">
+        <span className="badge-minuto">
+          <span className="punto-vivo"></span> {partido.minuto}
+        </span>
       </div>
 
-      {/* ⚽ SECCIÓN DE ANOTADORES */}
+      {/* 2. Cuerpo del contenedor: Equipos alineados y marcador al centro */}
+      <div className="tarjeta-cuerpo">
+        <div className="equipo equipo-local">
+          <span className="nombre-equipo">{partido.local}</span>
+        </div>
+
+        <div className="caja-marcador">
+          <span className="goles-num">{partido.golesLocal}</span>
+          <span className="separador">-</span>
+          <span className="goles-num">{partido.golesVisitante}</span>
+        </div>
+
+        <div className="equipo equipo-visitante">
+          <span className="nombre-equipo">{partido.visitante}</span>
+        </div>
+      </div>
+
+      {/* 3. Pie del contenedor: Anotadores de Gol */}
       {partido.anotadores && partido.anotadores.length > 0 && (
-        <div className="lista-anotadores">
-          <h4>⚽ Goles</h4>
-          <ul>
-            {partido.anotadores.map((gol, index) => (
-              <li key={index}>
-                <span className="jugador-gol">
-                  {gol.jugador} ({gol.minuto}') 
-                  {gol.tipo === 'Penalty' ? ' (P)' : ''} 
-                  {gol.tipo === 'Own Goal' ? ' (A.G.)' : ''}
+        <div className="tarjeta-footer">
+          <div className="titulo-anotadores">⚽ Goles</div>
+          <ul className="lista-goles">
+            {partido.anotadores.map((gol) => (
+              <li key={`${gol.jugador}-${gol.minuto}`} className="item-gol">
+                <span className="jugador-nombre">
+                  {gol.jugador} <small>({gol.minuto}')</small>
+                  {gol.tipo === 'Penalty' && <span className="tipo-gol"> (P)</span>}
+                  {gol.tipo === 'Own Goal' && <span className="tipo-gol"> (A.G.)</span>}
                 </span>
-                <span className="equipo-gol">- {gol.equipo}</span>
+                <span className="equipo-nombre">{gol.equipo}</span>
               </li>
             ))}
           </ul>
         </div>
       )}
 
+      {/* Etiqueta flotante de GOL */}
       {hayGol && <div className="etiqueta-gol">¡GOL!</div>}
     </div>
   );
