@@ -213,3 +213,50 @@
   0% { transform: scale(0); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
+
+/* Estilos para la sección de Anotadores */
+.lista-anotadores {
+  width: 100%;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed var(--borde-color);
+  font-size: 0.85rem;
+}
+
+.lista-anotadores h4 {
+  color: var(--texto-secundario);
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lista-anotadores ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lista-anotadores li {
+  display: flex;
+  justify-content: space-between;
+  color: var(--texto-principal);
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.tema-oscuro .lista-anotadores li {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.jugador-gol {
+  font-weight: 600;
+}
+
+.equipo-gol {
+  color: var(--texto-secundario);
+  font-size: 0.75rem;
+}

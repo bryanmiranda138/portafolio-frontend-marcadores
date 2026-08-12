@@ -10,47 +10,57 @@ const socket = io(SOCKET_URL);
 // Separar esto permite que cada tarjeta maneje su propia animación de gol
 function TarjetaPartido({ partido }) {
   const [hayGol, setHayGol] = useState(false);
-  
-  // useRef nos permite recordar los goles anteriores sin provocar que la pantalla parpadee
   const golesAnteriores = useRef({
     local: partido.golesLocal,
     visitante: partido.golesVisitante
   });
 
   useEffect(() => {
-    // Si los goles nuevos son mayores a los que teníamos guardados... ¡GOL!
     if (
       partido.golesLocal > golesAnteriores.current.local || 
       partido.golesVisitante > golesAnteriores.current.visitante
     ) {
-      setHayGol(true); // Encendemos la animación
-      
-      // La apagamos después de 3 segundos
-      setTimeout(() => {
-        setHayGol(false);
-      }, 3000);
+      setHayGol(true);
+      setTimeout(() => setHayGol(false), 3000);
     }
 
-    // Actualizamos nuestra memoria para la próxima vez
     golesAnteriores.current = {
       local: partido.golesLocal,
       visitante: partido.golesVisitante
     };
-  }, [partido.golesLocal, partido.golesVisitante]); // Solo revisamos cuando cambian los goles
+  }, [partido.golesLocal, partido.golesVisitante]);
 
   return (
-    // Si hayGol es true, le inyectamos la clase 'animacion-gol' a la tarjeta
     <div className={`tarjeta-partido ${hayGol ? 'animacion-gol' : ''}`}>
       <div className="tiempo-partido">
         <span className="minuto-pulsante">{partido.minuto}</span>
       </div>
+      
       <div className="marcador-equipos">
         <span className="equipo">{partido.local}</span>
         <span className="goles">{partido.golesLocal} - {partido.golesVisitante}</span>
         <span className="equipo">{partido.visitante}</span>
       </div>
-      
-      {/* Etiqueta de GOL dinámica */}
+
+      {/* ⚽ SECCIÓN DE ANOTADORES */}
+      {partido.anotadores && partido.anotadores.length > 0 && (
+        <div className="lista-anotadores">
+          <h4>⚽ Goles</h4>
+          <ul>
+            {partido.anotadores.map((gol, index) => (
+              <li key={index}>
+                <span className="jugador-gol">
+                  {gol.jugador} ({gol.minuto}') 
+                  {gol.tipo === 'Penalty' ? ' (P)' : ''} 
+                  {gol.tipo === 'Own Goal' ? ' (A.G.)' : ''}
+                </span>
+                <span className="equipo-gol">- {gol.equipo}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {hayGol && <div className="etiqueta-gol">¡GOL!</div>}
     </div>
   );
