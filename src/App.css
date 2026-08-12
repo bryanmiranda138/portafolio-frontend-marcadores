@@ -1,33 +1,87 @@
-/* Reseteo básico */
+/* Paletas de Colores (Variables CSS) */
+:root {
+  --bg-principal: #f3f4f6;
+  --bg-tarjeta: #ffffff;
+  --texto-principal: #1f2937;
+  --texto-secundario: #6b7280;
+  --borde-color: #e5e7eb;
+  --sombra-tarjeta: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --sombra-hover: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --bg-btn: #e5e7eb;
+  --hover-btn: #d1d5db;
+}
+
+.tema-oscuro {
+  --bg-principal: #0f172a;
+  --bg-tarjeta: #1e293b;
+  --texto-principal: #f8fafc;
+  --texto-secundario: #94a3b8;
+  --borde-color: #334155;
+  --sombra-tarjeta: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --sombra-hover: 0 10px 20px rgba(0, 0, 0, 0.5);
+  --bg-btn: #334155;
+  --hover-btn: #475569;
+}
+
+/* Reseteo y Transiciones Globales */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body {
-  background-color: #f3f4f6;
-  color: #1f2937;
+.app-wrapper {
+  min-height: 100vh;
+  background-color: var(--bg-principal);
+  color: var(--texto-principal);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .contenedor {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 30px 20px;
 }
 
-/* Cabecera */
+/* Cabecera y Botón de Tema */
 .cabecera {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--borde-color);
+  transition: border-color 0.3s ease;
+}
+
+.titulo-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #e5e7eb;
+  width: 100%;
 }
 
+.btn-tema {
+  background-color: var(--bg-btn);
+  color: var(--texto-principal);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-tema:hover {
+  background-color: var(--hover-btn);
+  transform: scale(1.05);
+}
+
+/* Conexión */
 .estado-conexion {
+  align-self: flex-end;
   font-size: 0.9rem;
   font-weight: bold;
 }
@@ -38,45 +92,50 @@ body {
 /* Grid de Partidos */
 .grid-partidos {
   display: grid;
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .cargando {
   text-align: center;
-  color: #6b7280;
+  color: var(--texto-secundario);
   font-style: italic;
+  grid-column: 1 / -1;
+  padding: 40px 0;
 }
 
-/* Tarjeta individual */
+/* Tarjetas */
 .tarjeta-partido {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  background-color: var(--bg-tarjeta);
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: var(--sombra-tarjeta);
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: transform 0.2s ease;
+  border: 1px solid var(--borde-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .tarjeta-partido:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: var(--sombra-hover);
 }
 
 /* Minuto de juego */
 .tiempo-partido {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .minuto-pulsante {
-  background-color: #fee2e2;
-  color: #dc2626;
-  padding: 4px 10px;
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.85rem;
-  font-weight: bold;
+  font-weight: 700;
   animation: pulso 2s infinite;
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 /* Marcador */
@@ -85,28 +144,72 @@ body {
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .equipo {
   flex: 1;
   text-align: center;
   font-weight: 600;
+  color: var(--texto-principal);
 }
 
 .goles {
-  background-color: #1f2937;
-  color: white;
-  padding: 8px 15px;
-  border-radius: 8px;
-  font-size: 1.5rem;
-  font-weight: bold;
+  background-color: var(--texto-principal);
+  color: var(--bg-tarjeta);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 1.6rem;
+  font-weight: 800;
   margin: 0 15px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Animación de latido para el minuto */
+/* Animación de latido */
 @keyframes pulso {
   0% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50% { opacity: 0.4; }
   100% { opacity: 1; }
+}
+/* ========================================= */
+/* ✨ ANIMACIÓN DE GOL (Efecto Celebración)  */
+/* ========================================= */
+
+/* Esta clase se inyecta dinámicamente con JavaScript */
+.animacion-gol {
+  border-color: #10b981; /* Borde Verde */
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); /* Resplandor Verde */
+  animation: sacudida 0.5s ease-in-out;
+  position: relative; /* Necesario para posicionar la etiqueta */
+}
+
+/* La pequeña etiqueta de "¡GOL!" que aparece de la nada */
+.etiqueta-gol {
+  position: absolute;
+  top: -12px;
+  right: -10px;
+  background-color: #10b981;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  animation: saltar-aparecer 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Animación: Sacudida de emoción */
+@keyframes sacudida {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.05) rotate(2deg); }
+  50% { transform: scale(1.05) rotate(-2deg); }
+  75% { transform: scale(1.05) rotate(2deg); }
+  100% { transform: scale(1); }
+}
+
+/* Animación: Efecto de Pop-up para la etiqueta */
+@keyframes saltar-aparecer {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
