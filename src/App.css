@@ -1,0 +1,112 @@
+/* Reseteo básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+.contenedor {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Cabecera */
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.estado-conexion {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.online { color: #10b981; }
+.offline { color: #ef4444; }
+
+/* Grid de Partidos */
+.grid-partidos {
+  display: grid;
+  gap: 15px;
+}
+
+.cargando {
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Tarjeta individual */
+.tarjeta-partido {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.tarjeta-partido:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Minuto de juego */
+.tiempo-partido {
+  margin-bottom: 15px;
+}
+
+.minuto-pulsante {
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  animation: pulso 2s infinite;
+}
+
+/* Marcador */
+.marcador-equipos {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+}
+
+.equipo {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+}
+
+.goles {
+  background-color: #1f2937;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0 15px;
+}
+
+/* Animación de latido para el minuto */
+@keyframes pulso {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
