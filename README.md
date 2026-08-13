@@ -35,9 +35,9 @@ Sigue estos pasos para ejecutar el proyecto en tu máquina local:
    git clone [https://github.com/bryanmiranda138/portafolio-frontend-marcadores.git](https://github.com/bryanmiranda138/portafolio-frontend-marcadores.git)
    cd portafolio-frontend-marcadores
 
-##🤝 Agradecimientos y Créditos
--Datos en vivo proporcionados por API-Football.
+## 🤝 Agradecimientos y Créditos
+- **Datos en vivo proporcionados por API-Football.**
 
--Calendario e imágenes de escudos proporcionados por TheSportsDB.
+- **Calendario e imágenes de escudos proporcionados por TheSportsDB.**
 
 Desarrollado para portafolio profesional.
