@@ -156,29 +156,31 @@ function App() {
       
       {/* 🧭 NAVBAR SUPERIOR */}
       <nav className="navbar">
-        <div className="navbar-contenido">
-          <div className="brand">
-            <span className="logo-icon">⚽</span>
-            <span className="brand-title">
-              LiveScoresBC <small className="badge-pro">BETA</small>
-            </span>
-          </div>
+  <div className="navbar-contenido">
+    <div className="brand">
+      {/* ⚽ Reemplazamos el emoji por la imagen almacenada en /public */}
+      <img src="/ball.webp" alt="Logo LiveScores" className="logo-icon" />
+      
+      <span className="brand-title">
+        LiveScoresBC <small className="badge-pro">BETA</small>
+      </span>
+    </div>
 
-          <div className="navbar-acciones">
-            <div className="estado-conexion">
-              {conectado ? (
-                <span className="online"><span className="dot"></span> En línea</span>
-              ) : (
-                <span className="offline"><span className="dot"></span> Desconectado</span>
-              )}
-            </div>
+    <div className="navbar-acciones">
+      <div className="estado-conexion">
+        {conectado ? (
+          <span className="online"><span className="dot"></span> En línea</span>
+        ) : (
+          <span className="offline"><span className="dot"></span> Desconectado</span>
+        )}
+      </div>
 
-            <button className="btn-tema" onClick={toggleTema} title="Cambiar Tema">
-              {modoOscuro ? '☀️ Claro' : '🌙 Oscuro'}
-            </button>
-          </div>
-        </div>
-      </nav>
+      <button className="btn-tema" onClick={toggleTema} title="Cambiar Tema">
+        {modoOscuro ? '☀️ Claro' : '🌙 Oscuro'}
+      </button>
+    </div>
+  </div>
+</nav>
 
       {/* 🏟️ CONTENIDO PRINCIPAL EN 2 COLUMNAS */}
       <main className="contenedor-principal">
