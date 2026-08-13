@@ -6,53 +6,58 @@ import './App.css';
 const SOCKET_URL = 'https://api-marcadores-sv.onrender.com'; 
 const socket = io(SOCKET_URL);
 
-// --- COMPONENTE: TARJETA DE PARTIDO INDIVIDUAL ---
+// --- COMPONENTE: TARJETA DE PARTIDO INDIVIDUAL (BLINDADA) ---
 function TarjetaPartido({ partido }) {
   const [hayGol, setHayGol] = useState(false);
+  
+  // 🛡️ ESCUDO 2: Usamos ?? 0 por si los goles vienen como null o undefined
   const golesAnteriores = useRef({
-    local: partido.golesLocal,
-    visitante: partido.golesVisitante
+    local: partido?.golesLocal ?? 0,
+    visitante: partido?.golesVisitante ?? 0
   });
 
   useEffect(() => {
-    if (partido.esEnVivo) {
+    if (partido?.esEnVivo) {
       if (
-        partido.golesLocal > golesAnteriores.current.local || 
-        partido.golesVisitante > golesAnteriores.current.visitante
+        (partido?.golesLocal ?? 0) > golesAnteriores.current.local || 
+        (partido?.golesVisitante ?? 0) > golesAnteriores.current.visitante
       ) {
         setHayGol(true);
         setTimeout(() => setHayGol(false), 3000);
       }
 
       golesAnteriores.current = {
-        local: partido.golesLocal,
-        visitante: partido.golesVisitante
+        local: partido?.golesLocal ?? 0,
+        visitante: partido?.golesVisitante ?? 0
       };
     }
-  }, [partido.golesLocal, partido.golesVisitante, partido.esEnVivo]);
+  }, [partido?.golesLocal, partido?.golesVisitante, partido?.esEnVivo]);
 
-  const esProximo = partido.estado === 'PROXIMO';
-  const estaEnJuego = partido.esEnVivo && !['HT', 'FT', 'AET', 'PEN'].includes(partido.estado);
+  // Si por algún error el partido está vacío, detenemos el renderizado aquí mismo
+  if (!partido) return null; 
+
+  const esProximo = partido?.estado === 'PROXIMO';
+  // Protegemos el includes por si partido.estado es undefined
+  const estaEnJuego = partido?.esEnVivo && !['HT', 'FT', 'AET', 'PEN'].includes(partido?.estado || ''); 
 
   return (
     <div className={`tarjeta-partido ${hayGol ? 'animacion-gol' : ''}`}>
-      {/* 1. Cabecera: Minuto en vivo o Fecha del próximo partido */}
       <div className="tarjeta-header">
         {esProximo ? (
           <span className="badge-minuto badge-proximo">
-            📅 Próximo: {partido.minuto}
+            📅 Próximo: {partido?.minuto || 'Por definir'}
           </span>
         ) : (
           <span className={`badge-minuto ${!estaEnJuego ? 'badge-pausado' : ''}`}>
-            {estaEnJuego && <span className="punto-vivo"></span>} {partido.minuto}
+            {estaEnJuego && <span className="punto-vivo"></span>} {partido?.minuto || '-'}
           </span>
         )}
       </div>
 
-      {/* 2. Cuerpo: Equipos y Marcador o VS */}
       <div className="tarjeta-cuerpo">
         <div className="equipo equipo-local">
-          <span className="nombre-equipo">{partido.local}</span>
+          {/* 🛡️ ESCUDO 3: Si no viene nombre, ponemos 'Equipo Local' */}
+          <span className="nombre-equipo">{partido?.local || 'Local'}</span>
         </div>
 
         <div className="caja-marcador">
@@ -60,29 +65,28 @@ function TarjetaPartido({ partido }) {
             <span className="texto-vs">VS</span>
           ) : (
             <>
-              <span className="goles-num">{partido.golesLocal}</span>
+              <span className="goles-num">{partido?.golesLocal ?? 0}</span>
               <span className="separador">-</span>
-              <span className="goles-num">{partido.golesVisitante}</span>
+              <span className="goles-num">{partido?.golesVisitante ?? 0}</span>
             </>
           )}
         </div>
 
         <div className="equipo equipo-visitante">
-          <span className="nombre-equipo">{partido.visitante}</span>
+          <span className="nombre-equipo">{partido?.visitante || 'Visitante'}</span>
         </div>
       </div>
 
-      {/* 3. Pie: Anotadores (solo si es en vivo) */}
-      {partido.anotadores && partido.anotadores.length > 0 && (
+      {Array.isArray(partido?.anotadores) && partido.anotadores.length > 0 && (
         <div className="tarjeta-footer">
           <div className="titulo-anotadores">⚽ Goles</div>
           <ul className="lista-goles">
-            {partido.anotadores.map((gol) => (
-              <li key={`${gol.jugador}-${gol.minuto}`} className="item-gol">
+            {partido.anotadores.map((gol, index) => (
+              <li key={`${gol?.jugador}-${gol?.minuto}-${index}`} className="item-gol">
                 <span className="jugador-nombre">
-                  {gol.jugador} <small>({gol.minuto}')</small>
+                  {gol?.jugador || 'Jugador'} <small>({gol?.minuto || '0'}')</small>
                 </span>
-                <span className="equipo-nombre">{gol.equipo}</span>
+                <span className="equipo-nombre">{gol?.equipo || ''}</span>
               </li>
             ))}
           </ul>
