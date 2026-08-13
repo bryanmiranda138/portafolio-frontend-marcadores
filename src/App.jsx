@@ -10,7 +10,6 @@ const socket = io(SOCKET_URL);
 function TarjetaPartido({ partido }) {
   const [hayGol, setHayGol] = useState(false);
   
-  // 🛡️ ESCUDO: Fallback a 0 si los goles vienen como null o undefined
   const golesAnteriores = useRef({
     local: partido?.golesLocal ?? 0,
     visitante: partido?.golesVisitante ?? 0
@@ -113,7 +112,6 @@ function App() {
   };
 
   useEffect(() => {
-    // Verificar si ya estaba conectado al montar
     if (socket.connected) {
       setConectado(true);
     }
@@ -133,6 +131,10 @@ function App() {
       socket.off('marcadores_actualizados');
     };
   }, []);
+
+  // 🔍 SEPARACIÓN DE PARTIDOS EN DOS ARREGLOS DISTINTOS
+  const partidosEnVivo = partidos.filter((p) => p?.esEnVivo);
+  const partidosProximos = partidos.filter((p) => !p?.esEnVivo);
 
   return (
     <div className={`app-wrapper ${modoOscuro ? 'tema-oscuro' : 'tema-claro'}`}>
@@ -163,24 +165,59 @@ function App() {
         </div>
       </nav>
 
-      {/* 🏟️ CONTENIDO PRINCIPAL */}
+      {/* 🏟️ CONTENIDO PRINCIPAL EN 2 COLUMNAS */}
       <main className="contenedor-principal">
         <div className="seccion-encabezado">
-          <h2>Marcadores en Vivo</h2>
-          <p className="subtitulo">Sincronización en tiempo real</p>
+          <h2>Panel de Marcadores</h2>
+          <p className="subtitulo">Sincronización en tiempo real vía WebSockets</p>
         </div>
 
-        <div className="grid-partidos">
-          {partidos.length === 0 ? (
-            <div className="caja-vacia">
-              <div className="spinner"></div>
-              <p className="cargando">Buscando partidos en vivo en este momento...</p>
+        {/* 📐 CONTENEDOR GRID EN LA MISMA FILA */}
+        <div className="layout-dos-columnas">
+
+          {/* 🔴 CONTENEDOR 1: PARTIDOS EN VIVO */}
+          <section className="columna-seccion columna-envivo">
+            <div className="encabezado-columna">
+              <span className="titulo-seccion">
+                <span className="punto-rojo-vivo"></span> Partidos en Vivo
+              </span>
+              <span className="badge-contador">{partidosEnVivo.length}</span>
             </div>
-          ) : (
-            partidos.map((partido, index) => (
-              <TarjetaPartido key={partido?.id || index} partido={partido} />
-            ))
-          )}
+
+            <div className="grid-partidos">
+              {partidosEnVivo.length === 0 ? (
+                <div className="caja-vacia-columna">
+                  <p className="texto-vacio">No hay partidos en vivo en este momento</p>
+                </div>
+              ) : (
+                partidosEnVivo.map((partido, index) => (
+                  <TarjetaPartido key={partido?.id || `live-${index}`} partido={partido} />
+                ))
+              )}
+            </div>
+          </section>
+
+          {/* 📅 CONTENEDOR 2: PRÓXIMOS PARTIDOS */}
+          <section className="columna-seccion columna-proximos">
+            <div className="encabezado-columna">
+              <span className="titulo-seccion">📅 Próximos Partidos</span>
+              <span className="badge-contador">{partidosProximos.length}</span>
+            </div>
+
+            <div className="grid-partidos">
+              {partidosProximos.length === 0 ? (
+                <div className="caja-vacia-columna">
+                  <div className="spinner"></div>
+                  <p className="texto-vacio">Buscando próximos partidos...</p>
+                </div>
+              ) : (
+                partidosProximos.map((partido, index) => (
+                  <TarjetaPartido key={partido?.id || `prox-${index}`} partido={partido} />
+                ))
+              )}
+            </div>
+          </section>
+
         </div>
       </main>
 
@@ -191,6 +228,10 @@ function App() {
             Estadísticas y datos deportivos proporcionados en tiempo real por{' '}
             <a href="https://www.api-football.com/" target="_blank" rel="noopener noreferrer">
               API-Football
+            </a>{' '}
+            y{' '}
+            <a href="https://www.thesportsdb.com/" target="_blank" rel="noopener noreferrer">
+              TheSportsDB
             </a>
           </p>
           <p className="footer-subtext">

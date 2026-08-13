@@ -146,14 +146,95 @@
 }
 
 /* ========================================= */
-/* 🏟️ CONTENIDO PRINCIPAL                   */
+/* 📐 LAYOUT DE 2 COLUMNAS EN LA MISMA FILA  */
 /* ========================================= */
 .contenedor-principal {
   flex: 1;
-  max-width: 800px;
+  max-width: 1200px; /* Ampliado para dar suficiente espacio a dos columnas */
   width: 100%;
   margin: 0 auto;
   padding: 32px 20px;
+}
+
+.layout-dos-columnas {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas de igual ancho */
+  gap: 24px;
+  align-items: start;
+  width: 100%;
+}
+
+/* Adaptabilidad a dispositivos móviles (Misma fila en Desktop, apilados en Mobile) */
+@media (max-width: 900px) {
+  .layout-dos-columnas {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Estilos de cada contenedor/columna */
+.columna-seccion {
+  background-color: var(--bg-tarjeta);
+  border: 1px solid var(--borde-color);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--sombra-tarjeta);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.encabezado-columna {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--borde-color);
+}
+
+.titulo-seccion {
+  font-size: 1.1rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--texto-principal);
+}
+
+.punto-rojo-vivo {
+  width: 10px;
+  height: 10px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+  animation: pulso-punto 1.5s infinite;
+}
+
+.badge-contador {
+  background-color: var(--bg-btn);
+  color: var(--texto-principal);
+  border: 1px solid var(--borde-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+/* Cajas para cuando no hay partidos en la columna */
+.caja-vacia-columna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.texto-vacio {
+  color: var(--texto-secundario);
+  font-size: 0.88rem;
+  font-style: italic;
 }
 
 .seccion-encabezado {
