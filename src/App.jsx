@@ -6,7 +6,10 @@ import './App.css';
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'https://api-marcadores-sv.onrender.com'; 
 const socket = io(SOCKET_URL);
 
-// --- COMPONENTE: TARJETA DE PARTIDO INDIVIDUAL (BLINDADA) ---
+// Balón de fútbol limpio en formato SVG para los equipos sin escudo
+const ESCUDO_DEFAULT = "https://upload.wikimedia.org/wikipedia/commons/d/d3/Soccerball.svg";
+
+// --- COMPONENTE: TARJETA DE PARTIDO INDIVIDUAL ---
 function TarjetaPartido({ partido }) {
   const [hayGol, setHayGol] = useState(false);
   
@@ -25,16 +28,11 @@ function TarjetaPartido({ partido }) {
         const timer = setTimeout(() => setHayGol(false), 3000);
         return () => clearTimeout(timer);
       }
-
-      golesAnteriores.current = {
-        local: partido?.golesLocal ?? 0,
-        visitante: partido?.golesVisitante ?? 0
-      };
+      golesAnteriores.current = { local: partido?.golesLocal ?? 0, visitante: partido?.golesVisitante ?? 0 };
     }
   }, [partido?.golesLocal, partido?.golesVisitante, partido?.esEnVivo]);
 
   if (!partido) return null; 
-
   const esProximo = partido?.estado === 'PROXIMO';
   const estaEnJuego = partido?.esEnVivo && !['HT', 'FT', 'AET', 'PEN'].includes(partido?.estado || ''); 
 
@@ -52,11 +50,21 @@ function TarjetaPartido({ partido }) {
         )}
       </div>
 
+      {/* 🛡️ EFECTO ESPEJO TIPO SOFASCORE */}
       <div className="tarjeta-cuerpo">
+        
+        {/* Lado Izquierdo: Nombre Local -> Escudo */}
         <div className="equipo equipo-local">
           <span className="nombre-equipo">{partido?.local || 'Local'}</span>
+          <img 
+            src={partido?.logoLocal || ESCUDO_DEFAULT} 
+            alt={`Escudo ${partido?.local}`} 
+            className="escudo-equipo" 
+            onError={(e) => { e.target.onerror = null; e.target.src = ESCUDO_DEFAULT; }} 
+          />
         </div>
 
+        {/* Centro: Marcador */}
         <div className="caja-marcador">
           {esProximo ? (
             <span className="texto-vs">VS</span>
@@ -69,7 +77,14 @@ function TarjetaPartido({ partido }) {
           )}
         </div>
 
+        {/* Lado Derecho: Escudo -> Nombre Visitante */}
         <div className="equipo equipo-visitante">
+          <img 
+            src={partido?.logoVisitante || ESCUDO_DEFAULT} 
+            alt={`Escudo ${partido?.visitante}`} 
+            className="escudo-equipo" 
+            onError={(e) => { e.target.onerror = null; e.target.src = ESCUDO_DEFAULT; }} 
+          />
           <span className="nombre-equipo">{partido?.visitante || 'Visitante'}</span>
         </div>
       </div>
@@ -81,9 +96,9 @@ function TarjetaPartido({ partido }) {
             {partido.anotadores.map((gol, index) => (
               <li key={`${gol?.jugador}-${gol?.minuto}-${index}`} className="item-gol">
                 <span className="jugador-nombre">
-                  {gol?.jugador || 'Jugador'} <small>({gol?.minuto || '0'}')</small>
+                  {gol?.jugador} <small>({gol?.minuto}')</small>
                 </span>
-                <span className="equipo-nombre">{gol?.equipo || ''}</span>
+                <span className="equipo-nombre">{gol?.equipo}</span>
               </li>
             ))}
           </ul>
