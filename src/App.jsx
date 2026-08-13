@@ -3,14 +3,14 @@ import { io } from 'socket.io-client';
 import './App.css';
 
 // URL de producción en Render
-const SOCKET_URL = 'https://api-marcadores-sv.onrender.com'; 
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'https://api-marcadores-sv.onrender.com'; 
 const socket = io(SOCKET_URL);
 
 // --- COMPONENTE: TARJETA DE PARTIDO INDIVIDUAL (BLINDADA) ---
 function TarjetaPartido({ partido }) {
   const [hayGol, setHayGol] = useState(false);
   
-  // 🛡️ ESCUDO 2: Usamos ?? 0 por si los goles vienen como null o undefined
+  // 🛡️ ESCUDO: Fallback a 0 si los goles vienen como null o undefined
   const golesAnteriores = useRef({
     local: partido?.golesLocal ?? 0,
     visitante: partido?.golesVisitante ?? 0
@@ -23,7 +23,8 @@ function TarjetaPartido({ partido }) {
         (partido?.golesVisitante ?? 0) > golesAnteriores.current.visitante
       ) {
         setHayGol(true);
-        setTimeout(() => setHayGol(false), 3000);
+        const timer = setTimeout(() => setHayGol(false), 3000);
+        return () => clearTimeout(timer);
       }
 
       golesAnteriores.current = {
@@ -33,11 +34,9 @@ function TarjetaPartido({ partido }) {
     }
   }, [partido?.golesLocal, partido?.golesVisitante, partido?.esEnVivo]);
 
-  // Si por algún error el partido está vacío, detenemos el renderizado aquí mismo
   if (!partido) return null; 
 
   const esProximo = partido?.estado === 'PROXIMO';
-  // Protegemos el includes por si partido.estado es undefined
   const estaEnJuego = partido?.esEnVivo && !['HT', 'FT', 'AET', 'PEN'].includes(partido?.estado || ''); 
 
   return (
@@ -56,7 +55,6 @@ function TarjetaPartido({ partido }) {
 
       <div className="tarjeta-cuerpo">
         <div className="equipo equipo-local">
-          {/* 🛡️ ESCUDO 3: Si no viene nombre, ponemos 'Equipo Local' */}
           <span className="nombre-equipo">{partido?.local || 'Local'}</span>
         </div>
 
@@ -115,10 +113,18 @@ function App() {
   };
 
   useEffect(() => {
+    // Verificar si ya estaba conectado al montar
+    if (socket.connected) {
+      setConectado(true);
+    }
+
     socket.on('connect', () => setConectado(true));
     socket.on('disconnect', () => setConectado(false));
+    
     socket.on('marcadores_actualizados', (datosNuevos) => {
-      setPartidos(datosNuevos);
+      if (Array.isArray(datosNuevos)) {
+        setPartidos(datosNuevos);
+      }
     });
 
     return () => {
@@ -171,8 +177,8 @@ function App() {
               <p className="cargando">Buscando partidos en vivo en este momento...</p>
             </div>
           ) : (
-            partidos.map((partido) => (
-              <TarjetaPartido key={partido.id} partido={partido} />
+            partidos.map((partido, index) => (
+              <TarjetaPartido key={partido?.id || index} partido={partido} />
             ))
           )}
         </div>
