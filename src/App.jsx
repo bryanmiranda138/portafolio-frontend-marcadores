@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 import './App.css';
 
 // URL de producción en Render
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'https://api-marcadores-sv.onrender.com'; 
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'https://api-marcadores-sv.onrender.com';
 const socket = io(SOCKET_URL);
 
 // Balón de fútbol limpio en formato SVG para los equipos sin escudo
@@ -12,7 +12,7 @@ const ESCUDO_DEFAULT = "https://upload.wikimedia.org/wikipedia/commons/d/d3/Socc
 // --- COMPONENTE: TARJETA DE PARTIDO INDIVIDUAL ---
 function TarjetaPartido({ partido }) {
   const [hayGol, setHayGol] = useState(false);
-  
+
   const golesAnteriores = useRef({
     local: partido?.golesLocal ?? 0,
     visitante: partido?.golesVisitante ?? 0
@@ -21,7 +21,7 @@ function TarjetaPartido({ partido }) {
   useEffect(() => {
     if (partido?.esEnVivo) {
       if (
-        (partido?.golesLocal ?? 0) > golesAnteriores.current.local || 
+        (partido?.golesLocal ?? 0) > golesAnteriores.current.local ||
         (partido?.golesVisitante ?? 0) > golesAnteriores.current.visitante
       ) {
         setHayGol(true);
@@ -32,9 +32,9 @@ function TarjetaPartido({ partido }) {
     }
   }, [partido?.golesLocal, partido?.golesVisitante, partido?.esEnVivo]);
 
-  if (!partido) return null; 
+  if (!partido) return null;
   const esProximo = partido?.estado === 'PROXIMO';
-  const estaEnJuego = partido?.esEnVivo && !['HT', 'FT', 'AET', 'PEN'].includes(partido?.estado || ''); 
+  const estaEnJuego = partido?.esEnVivo && !['HT', 'FT', 'AET', 'PEN'].includes(partido?.estado || '');
 
   return (
     <div className={`tarjeta-partido ${hayGol ? 'animacion-gol' : ''}`}>
@@ -52,15 +52,15 @@ function TarjetaPartido({ partido }) {
 
       {/* 🛡️ EFECTO ESPEJO TIPO SOFASCORE */}
       <div className="tarjeta-cuerpo">
-        
+
         {/* Lado Izquierdo: Nombre Local -> Escudo */}
         <div className="equipo equipo-local">
           <span className="nombre-equipo">{partido?.local || 'Local'}</span>
-          <img 
-            src={partido?.logoLocal || ESCUDO_DEFAULT} 
-            alt={`Escudo ${partido?.local}`} 
-            className="escudo-equipo" 
-            onError={(e) => { e.target.onerror = null; e.target.src = ESCUDO_DEFAULT; }} 
+          <img
+            src={partido?.logoLocal || ESCUDO_DEFAULT}
+            alt={`Escudo ${partido?.local}`}
+            className="escudo-equipo"
+            onError={(e) => { e.target.onerror = null; e.target.src = ESCUDO_DEFAULT; }}
           />
         </div>
 
@@ -79,11 +79,11 @@ function TarjetaPartido({ partido }) {
 
         {/* Lado Derecho: Escudo -> Nombre Visitante */}
         <div className="equipo equipo-visitante">
-          <img 
-            src={partido?.logoVisitante || ESCUDO_DEFAULT} 
-            alt={`Escudo ${partido?.visitante}`} 
-            className="escudo-equipo" 
-            onError={(e) => { e.target.onerror = null; e.target.src = ESCUDO_DEFAULT; }} 
+          <img
+            src={partido?.logoVisitante || ESCUDO_DEFAULT}
+            alt={`Escudo ${partido?.visitante}`}
+            className="escudo-equipo"
+            onError={(e) => { e.target.onerror = null; e.target.src = ESCUDO_DEFAULT; }}
           />
           <span className="nombre-equipo">{partido?.visitante || 'Visitante'}</span>
         </div>
@@ -133,7 +133,7 @@ function App() {
 
     socket.on('connect', () => setConectado(true));
     socket.on('disconnect', () => setConectado(false));
-    
+
     socket.on('marcadores_actualizados', (datosNuevos) => {
       if (Array.isArray(datosNuevos)) {
         setPartidos(datosNuevos);
@@ -153,34 +153,34 @@ function App() {
 
   return (
     <div className={`app-wrapper ${modoOscuro ? 'tema-oscuro' : 'tema-claro'}`}>
-      
+
       {/* 🧭 NAVBAR SUPERIOR */}
       <nav className="navbar">
-  <div className="navbar-contenido">
-    <div className="brand">
-      {/* ⚽ Reemplazamos el emoji por la imagen almacenada en /public */}
-      <img src="/ball.webp" alt="Logo LiveScores" className="logo-icon" />
-      
-      <span className="brand-title">
-        LiveScoresBC <small className="badge-pro">BETA</small>
-      </span>
-    </div>
+        <div className="navbar-contenido">
+          <div className="brand">
+            {/* ⚽ Reemplazamos el emoji por la imagen almacenada en /public */}
+            <img src="/ball.webp" alt="Logo LiveScores" className="logo-icon" />
 
-    <div className="navbar-acciones">
-      <div className="estado-conexion">
-        {conectado ? (
-          <span className="online"><span className="dot"></span> En línea</span>
-        ) : (
-          <span className="offline"><span className="dot"></span> Desconectado</span>
-        )}
-      </div>
+            <span className="brand-title">
+              LiveScoresBC <small className="badge-pro">BETA</small>
+            </span>
+          </div>
 
-      <button className="btn-tema" onClick={toggleTema} title="Cambiar Tema">
-        {modoOscuro ? '☀️ Claro' : '🌙 Oscuro'}
-      </button>
-    </div>
-  </div>
-</nav>
+          <div className="navbar-acciones">
+            <div className="estado-conexion">
+              {conectado ? (
+                <span className="online"><span className="dot"></span> En línea</span>
+              ) : (
+                <span className="offline"><span className="dot"></span> Desconectado</span>
+              )}
+            </div>
+
+            <button className="btn-tema" onClick={toggleTema} title="Cambiar Tema">
+              {modoOscuro ? '☀️ Claro' : '🌙 Oscuro'}
+            </button>
+          </div>
+        </div>
+      </nav>
 
       {/* 🏟️ CONTENIDO PRINCIPAL EN 2 COLUMNAS */}
       <main className="contenedor-principal">
