@@ -1,286 +1,226 @@
 /* Paletas de Colores (Variables CSS) */
 :root {
-  --bg-principal: #f3f4f6;
+  --bg-principal: #f8fafc;
+  --bg-navbar: #ffffff;
   --bg-tarjeta: #ffffff;
-  --texto-principal: #1f2937;
-  --texto-secundario: #6b7280;
-  --borde-color: #e5e7eb;
-  --sombra-tarjeta: 0 4px 6px rgba(0, 0, 0, 0.05);
-  --sombra-hover: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --bg-btn: #e5e7eb;
-  --hover-btn: #d1d5db;
+  --texto-principal: #0f172a;
+  --texto-secundario: #64748b;
+  --borde-color: #e2e8f0;
+  --sombra-tarjeta: 0 4px 12px rgba(0, 0, 0, 0.03);
+  --sombra-hover: 0 10px 20px rgba(0, 0, 0, 0.08);
+  --bg-btn: #f1f5f9;
+  --hover-btn: #e2e8f0;
 }
 
 .tema-oscuro {
-  --bg-principal: #0f172a;
-  --bg-tarjeta: #1e293b;
-  --texto-principal: #f8fafc;
-  --texto-secundario: #94a3b8;
-  --borde-color: #334155;
-  --sombra-tarjeta: 0 4px 6px rgba(0, 0, 0, 0.3);
-  --sombra-hover: 0 10px 20px rgba(0, 0, 0, 0.5);
-  --bg-btn: #334155;
-  --hover-btn: #475569;
+  --bg-principal: #0b0f19;
+  --bg-navbar: #111827;
+  --bg-tarjeta: #1f2937;
+  --texto-principal: #f9fafb;
+  --texto-secundario: #9ca3af;
+  --borde-color: #374151;
+  --sombra-tarjeta: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --sombra-hover: 0 10px 22px rgba(0, 0, 0, 0.5);
+  --bg-btn: #374151;
+  --hover-btn: #4b5563;
 }
 
-/* Reseteo y Transiciones Globales */
+/* Reseteo y Layout Base */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .app-wrapper {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: var(--bg-principal);
   color: var(--texto-principal);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.contenedor {
+/* ========================================= */
+/* 🧭 NAVBAR / CABECERA                     */
+/* ========================================= */
+.navbar {
+  background-color: var(--bg-navbar);
+  border-bottom: 1px solid var(--borde-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.navbar-contenido {
   max-width: 900px;
   margin: 0 auto;
-  padding: 30px 20px;
-}
-
-/* Cabecera y Botón de Tema */
-.cabecera {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 40px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid var(--borde-color);
-  transition: border-color 0.3s ease;
-}
-
-.titulo-container {
+  padding: 14px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
 }
 
-.btn-tema {
-  background-color: var(--bg-btn);
-  color: var(--texto-principal);
-  border: none;
-  padding: 8px 16px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.btn-tema:hover {
-  background-color: var(--hover-btn);
-  transform: scale(1.05);
+.logo-icon {
+  font-size: 1.5rem;
 }
 
-/* Conexión */
+.brand-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-pro {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  font-size: 0.6rem;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.navbar-acciones {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Indicador de Conexión */
 .estado-conexion {
-  align-self: flex-end;
-  font-size: 0.9rem;
-  font-weight: bold;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.online, .offline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .online { color: #10b981; }
 .offline { color: #ef4444; }
 
-/* Grid de Partidos */
-.grid-partidos {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
 }
 
-.cargando {
-  text-align: center;
-  color: var(--texto-secundario);
-  font-style: italic;
-  grid-column: 1 / -1;
-  padding: 40px 0;
+.online .dot { 
+  background-color: #10b981; 
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6); 
 }
+.offline .dot { background-color: #ef4444; }
 
-/* Tarjetas */
-.tarjeta-partido {
-  background-color: var(--bg-tarjeta);
-  border-radius: 16px;
-  padding: 25px;
-  box-shadow: var(--sombra-tarjeta);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* Botón de tema */
+.btn-tema {
+  background-color: var(--bg-btn);
+  color: var(--texto-principal);
   border: 1px solid var(--borde-color);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.tarjeta-partido:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--sombra-hover);
-}
-
-/* Minuto de juego */
-.tiempo-partido {
-  margin-bottom: 20px;
-}
-
-.minuto-pulsante {
-  background-color: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
-  padding: 4px 12px;
+  padding: 7px 14px;
   border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
   font-size: 0.85rem;
-  font-weight: 700;
-  animation: pulso 2s infinite;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  transition: all 0.2s ease;
 }
 
-/* Marcador */
-.marcador-equipos {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.1rem;
+.btn-tema:hover {
+  background-color: var(--hover-btn);
+  transform: translateY(-1px);
 }
 
-.equipo {
+/* ========================================= */
+/* 🏟️ CONTENIDO PRINCIPAL                   */
+/* ========================================= */
+.contenedor-principal {
   flex: 1;
-  text-align: center;
-  font-weight: 600;
-  color: var(--texto-principal);
-}
-
-.goles {
-  background-color: var(--texto-principal);
-  color: var(--bg-tarjeta);
-  padding: 10px 18px;
-  border-radius: 10px;
-  font-size: 1.6rem;
-  font-weight: 800;
-  margin: 0 15px;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Animación de latido */
-@keyframes pulso {
-  0% { opacity: 1; }
-  50% { opacity: 0.4; }
-  100% { opacity: 1; }
-}
-/* ========================================= */
-/* ✨ ANIMACIÓN DE GOL (Efecto Celebración)  */
-/* ========================================= */
-
-/* Esta clase se inyecta dinámicamente con JavaScript */
-.animacion-gol {
-  border-color: #10b981; /* Borde Verde */
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); /* Resplandor Verde */
-  animation: sacudida 0.5s ease-in-out;
-  position: relative; /* Necesario para posicionar la etiqueta */
-}
-
-/* La pequeña etiqueta de "¡GOL!" que aparece de la nada */
-.etiqueta-gol {
-  position: absolute;
-  top: -12px;
-  right: -10px;
-  background-color: #10b981;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-  animation: saltar-aparecer 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-/* Animación: Sacudida de emoción */
-@keyframes sacudida {
-  0% { transform: scale(1); }
-  25% { transform: scale(1.05) rotate(2deg); }
-  50% { transform: scale(1.05) rotate(-2deg); }
-  75% { transform: scale(1.05) rotate(2deg); }
-  100% { transform: scale(1); }
-}
-
-/* Animación: Efecto de Pop-up para la etiqueta */
-@keyframes saltar-aparecer {
-  0% { transform: scale(0); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-/* Estilos para la sección de Anotadores */
-.lista-anotadores {
+  max-width: 800px;
   width: 100%;
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px dashed var(--borde-color);
-  font-size: 0.85rem;
+  margin: 0 auto;
+  padding: 32px 20px;
 }
 
-.lista-anotadores h4 {
+.seccion-encabezado {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.seccion-encabezado h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.subtitulo {
   color: var(--texto-secundario);
-  margin-bottom: 8px;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: 0.88rem;
 }
 
-.lista-anotadores ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.lista-anotadores li {
-  display: flex;
-  justify-content: space-between;
-  color: var(--texto-principal);
-  background-color: rgba(0, 0, 0, 0.05);
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-.tema-oscuro .lista-anotadores li {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-.jugador-gol {
-  font-weight: 600;
-}
-
-.equipo-gol {
-  color: var(--texto-secundario);
-  font-size: 0.75rem;
-}
-
-/* Layout principal: Lista vertical de contenedores centrados */
+/* Grid de Tarjetas */
 .grid-partidos {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-width: 750px;
-  margin: 0 auto;
   width: 100%;
 }
 
-/* --- TARJETA CONTENEDORA INDIVIDUAL --- */
+/* Caja de Carga */
+.caja-vacia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--borde-color);
+  border-top-color: #10b981;
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+  margin-bottom: 14px;
+}
+
+@keyframes girar {
+  to { transform: rotate(360deg); }
+}
+
+.cargando {
+  color: var(--texto-secundario);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* ========================================= */
+/* 🎴 TARJETA DE PARTIDO                    */
+/* ========================================= */
 .tarjeta-partido {
   background-color: var(--bg-tarjeta);
   border: 1px solid var(--borde-color);
   border-radius: 14px;
-  padding: 18px 24px;
+  padding: 18px 22px;
   box-shadow: var(--sombra-tarjeta);
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
   position: relative;
-  overflow: hidden;
 }
 
 .tarjeta-partido:hover {
@@ -288,7 +228,6 @@
   box-shadow: var(--sombra-hover);
 }
 
-/* 1. Cabecera */
 .tarjeta-header {
   display: flex;
   justify-content: center;
@@ -309,6 +248,13 @@
   border: 1px solid rgba(239, 68, 68, 0.25);
 }
 
+.badge-pausado {
+  background-color: var(--bg-btn);
+  color: var(--texto-secundario);
+  border: 1px solid var(--borde-color);
+  font-weight: 600;
+}
+
 .punto-vivo {
   width: 6px;
   height: 6px;
@@ -323,7 +269,6 @@
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* 2. Cuerpo Central (Equipos + Marcador) */
 .tarjeta-cuerpo {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -352,7 +297,6 @@
   color: var(--texto-principal);
 }
 
-/* Caja de Marcador centralizada */
 .caja-marcador {
   display: flex;
   align-items: center;
@@ -377,7 +321,7 @@
   font-weight: 600;
 }
 
-/* 3. Pie de la Tarjeta (Goleadores) */
+/* Anotadores */
 .tarjeta-footer {
   margin-top: 16px;
   padding-top: 12px;
@@ -396,7 +340,6 @@
 .lista-goles {
   list-style: none;
   padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -430,10 +373,78 @@
   color: var(--texto-secundario);
   font-size: 0.75rem;
 }
-/* Estado cuando el partido no está en juego activo (Medio tiempo o Finalizado) */
-.badge-pausado {
-  background-color: var(--bg-btn);
+
+/* Animación de Gol */
+.animacion-gol {
+  border-color: #10b981;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+  animation: sacudida 0.5s ease-in-out;
+}
+
+.etiqueta-gol {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: #10b981;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  animation: saltar-aparecer 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes sacudida {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.03) rotate(1deg); }
+  50% { transform: scale(1.03) rotate(-1deg); }
+  75% { transform: scale(1.03) rotate(1deg); }
+  100% { transform: scale(1); }
+}
+
+@keyframes saltar-aparecer {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ========================================= */
+/* 👣 FOOTER                                 */
+/* ========================================= */
+.footer {
+  background-color: var(--bg-navbar);
+  border-top: 1px solid var(--borde-color);
+  padding: 20px;
+  margin-top: auto;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.footer-contenido {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-creditos {
+  font-size: 0.88rem;
+  color: var(--texto-principal);
+}
+
+.footer-creditos a {
+  color: #10b981;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.footer-creditos a:hover {
+  text-decoration: underline;
+}
+
+.footer-subtext {
+  font-size: 0.78rem;
   color: var(--texto-secundario);
-  border: 1px solid var(--borde-color);
-  font-weight: 600;
 }
