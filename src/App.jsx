@@ -145,7 +145,7 @@ function App() {
           <div className="brand">
             <span className="logo-icon">⚽</span>
             <span className="brand-title">
-              LiveScores <small className="badge-pro">PRO</small>
+              LiveScoresBC <small className="badge-pro">BETA</small>
             </span>
           </div>
 
@@ -169,7 +169,7 @@ function App() {
       <main className="contenedor-principal">
         <div className="seccion-encabezado">
           <h2>Panel de Marcadores</h2>
-          <p className="subtitulo">Sincronización en tiempo real vía WebSockets</p>
+          <p className="subtitulo">Sincronización en tiempo real</p>
         </div>
 
         {/* 📐 CONTENEDOR GRID EN LA MISMA FILA */}
