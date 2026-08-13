@@ -71,9 +71,11 @@
 }
 
 .logo-icon {
-  font-size: 1.5rem;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
 }
-
 .brand-title {
   font-size: 1.2rem;
   font-weight: 800;
