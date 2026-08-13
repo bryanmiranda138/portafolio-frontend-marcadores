@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 import './App.css';
 
 // URL de producción en Render
-const SOCKET_URL = 'https://api-marcadores-sv.onrender.com'; 
+const SOCKET_URL = 'https://api-marcadores-sv.onrender.com/debug'; 
 const socket = io(SOCKET_URL);
 
 // --- COMPONENTE: TARJETA DE PARTIDO INDIVIDUAL ---
