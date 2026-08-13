@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 import './App.css';
 
 // ⚠️ Cambia esto por tu URL de Render cuando vayas a producción
-const SOCKET_URL = 'https://api-marcadores-sv.onrender.com'; 
+const SOCKET_URL = 'https://api-marcadores-sv.onrender.com';
 const socket = io(SOCKET_URL);
 
 // --- NUEVO COMPONENTE: TARJETA INDIVIDUAL ---
@@ -17,7 +17,7 @@ function TarjetaPartido({ partido }) {
 
   useEffect(() => {
     if (
-      partido.golesLocal > golesAnteriores.current.local || 
+      partido.golesLocal > golesAnteriores.current.local ||
       partido.golesVisitante > golesAnteriores.current.visitante
     ) {
       setHayGol(true);
@@ -29,13 +29,14 @@ function TarjetaPartido({ partido }) {
       visitante: partido.golesVisitante
     };
   }, [partido.golesLocal, partido.golesVisitante]);
-
+  // Determinamos si la pelota está rodando para mostrar el punto rojo
+  const estaEnJuego = partido.estado !== 'HT' && partido.estado !== 'FT' && partido.estado !== 'AET' && partido.estado !== 'PEN';
   return (
     <div className={`tarjeta-partido ${hayGol ? 'animacion-gol' : ''}`}>
       {/* 1. Cabecera del contenedor: Minuto y Estado */}
       <div className="tarjeta-header">
-        <span className="badge-minuto">
-          <span className="punto-vivo"></span> {partido.minuto}
+        <span className={`badge-minuto ${!estaEnJuego ? 'badge-pausado' : ''}`}>
+          {estaEnJuego && <span className="punto-vivo"></span>} {partido.minuto}
         </span>
       </div>
 
@@ -122,8 +123,8 @@ function App() {
             </button>
           </div>
           <div className="estado-conexion">
-            Estado: {conectado 
-              ? <span className="online">🟢 En línea</span> 
+            Estado: {conectado
+              ? <span className="online">🟢 En línea</span>
               : <span className="offline">🔴 Desconectado</span>}
           </div>
         </header>

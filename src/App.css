@@ -430,3 +430,10 @@
   color: var(--texto-secundario);
   font-size: 0.75rem;
 }
+/* Estado cuando el partido no está en juego activo (Medio tiempo o Finalizado) */
+.badge-pausado {
+  background-color: var(--bg-btn);
+  color: var(--texto-secundario);
+  border: 1px solid var(--borde-color);
+  font-weight: 600;
+}
