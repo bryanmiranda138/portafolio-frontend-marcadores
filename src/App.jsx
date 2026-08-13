@@ -15,42 +15,56 @@ function TarjetaPartido({ partido }) {
   });
 
   useEffect(() => {
-    if (
-      partido.golesLocal > golesAnteriores.current.local || 
-      partido.golesVisitante > golesAnteriores.current.visitante
-    ) {
-      setHayGol(true);
-      setTimeout(() => setHayGol(false), 3000);
+    if (partido.esEnVivo) {
+      if (
+        partido.golesLocal > golesAnteriores.current.local || 
+        partido.golesVisitante > golesAnteriores.current.visitante
+      ) {
+        setHayGol(true);
+        setTimeout(() => setHayGol(false), 3000);
+      }
+
+      golesAnteriores.current = {
+        local: partido.golesLocal,
+        visitante: partido.golesVisitante
+      };
     }
+  }, [partido.golesLocal, partido.golesVisitante, partido.esEnVivo]);
 
-    golesAnteriores.current = {
-      local: partido.golesLocal,
-      visitante: partido.golesVisitante
-    };
-  }, [partido.golesLocal, partido.golesVisitante]);
-
-  // Evaluamos si el partido está en juego activo
-  const estaEnJuego = partido.estado !== 'HT' && partido.estado !== 'FT' && partido.estado !== 'AET' && partido.estado !== 'PEN';
+  const esProximo = partido.estado === 'PROXIMO';
+  const estaEnJuego = partido.esEnVivo && !['HT', 'FT', 'AET', 'PEN'].includes(partido.estado);
 
   return (
     <div className={`tarjeta-partido ${hayGol ? 'animacion-gol' : ''}`}>
-      {/* Cabecera del contenedor */}
+      {/* 1. Cabecera: Minuto en vivo o Fecha del próximo partido */}
       <div className="tarjeta-header">
-        <span className={`badge-minuto ${!estaEnJuego ? 'badge-pausado' : ''}`}>
-          {estaEnJuego && <span className="punto-vivo"></span>} {partido.minuto}
-        </span>
+        {esProximo ? (
+          <span className="badge-minuto badge-proximo">
+            📅 Próximo: {partido.minuto}
+          </span>
+        ) : (
+          <span className={`badge-minuto ${!estaEnJuego ? 'badge-pausado' : ''}`}>
+            {estaEnJuego && <span className="punto-vivo"></span>} {partido.minuto}
+          </span>
+        )}
       </div>
 
-      {/* Cuerpo central: Equipos y Marcador */}
+      {/* 2. Cuerpo: Equipos y Marcador o VS */}
       <div className="tarjeta-cuerpo">
         <div className="equipo equipo-local">
           <span className="nombre-equipo">{partido.local}</span>
         </div>
 
         <div className="caja-marcador">
-          <span className="goles-num">{partido.golesLocal}</span>
-          <span className="separador">-</span>
-          <span className="goles-num">{partido.golesVisitante}</span>
+          {esProximo ? (
+            <span className="texto-vs">VS</span>
+          ) : (
+            <>
+              <span className="goles-num">{partido.golesLocal}</span>
+              <span className="separador">-</span>
+              <span className="goles-num">{partido.golesVisitante}</span>
+            </>
+          )}
         </div>
 
         <div className="equipo equipo-visitante">
@@ -58,7 +72,7 @@ function TarjetaPartido({ partido }) {
         </div>
       </div>
 
-      {/* Pie: Anotadores de Gol */}
+      {/* 3. Pie: Anotadores (solo si es en vivo) */}
       {partido.anotadores && partido.anotadores.length > 0 && (
         <div className="tarjeta-footer">
           <div className="titulo-anotadores">⚽ Goles</div>
@@ -67,8 +81,6 @@ function TarjetaPartido({ partido }) {
               <li key={`${gol.jugador}-${gol.minuto}`} className="item-gol">
                 <span className="jugador-nombre">
                   {gol.jugador} <small>({gol.minuto}')</small>
-                  {gol.tipo === 'Penalty' && <span className="tipo-gol"> (P)</span>}
-                  {gol.tipo === 'Own Goal' && <span className="tipo-gol"> (A.G.)</span>}
                 </span>
                 <span className="equipo-nombre">{gol.equipo}</span>
               </li>
@@ -77,7 +89,6 @@ function TarjetaPartido({ partido }) {
         </div>
       )}
 
-      {/* Etiqueta flotante de GOL */}
       {hayGol && <div className="etiqueta-gol">¡GOL!</div>}
     </div>
   );
