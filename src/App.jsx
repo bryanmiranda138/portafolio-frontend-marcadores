@@ -157,7 +157,7 @@ function App() {
       <main className="contenedor-principal">
         <div className="seccion-encabezado">
           <h2>Marcadores en Vivo</h2>
-          <p className="subtitulo">Sincronización en tiempo real vía WebSockets</p>
+          <p className="subtitulo">Sincronización en tiempo real</p>
         </div>
 
         <div className="grid-partidos">
