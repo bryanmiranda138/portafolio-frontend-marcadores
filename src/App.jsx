@@ -89,16 +89,36 @@ function TarjetaPartido({ partido }) {
         </div>
       </div>
 
+      {/* ⚽ SECCIÓN DE GOLES (Sólo goles válidos) */}
       {Array.isArray(partido?.anotadores) && partido.anotadores.length > 0 && (
         <div className="tarjeta-footer">
           <div className="titulo-anotadores">⚽ Goles</div>
           <ul className="lista-goles">
             {partido.anotadores.map((gol, index) => (
-              <li key={`${gol?.jugador}-${gol?.minuto}-${index}`} className="item-gol">
+              <li key={`gol-${gol?.jugador}-${gol?.minuto}-${index}`} className="item-gol">
                 <span className="jugador-nombre">
-                  {gol?.jugador} <small>({gol?.minuto}')</small>
+                  {gol?.jugador} <small>({gol?.minuto}')</small>{' '}
+                  {gol?.tipo !== 'Gol' && <small className="tag-tipo">({gol?.tipo})</small>}
                 </span>
                 <span className="equipo-nombre">{gol?.equipo}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* 🟨 🟥 SECCIÓN DE TARJETAS (Amarillas y Rojas) */}
+      {Array.isArray(partido?.tarjetas) && partido.tarjetas.length > 0 && (
+        <div className="tarjeta-footer footer-tarjetas">
+          <div className="titulo-anotadores">🟨 / 🟥 Tarjetas</div>
+          <ul className="lista-goles">
+            {partido.tarjetas.map((card, index) => (
+              <li key={`card-${card?.jugador}-${card?.minuto}-${index}`} className="item-gol">
+                <span className="jugador-nombre">
+                  <span className={card?.tipo === 'Amarilla' ? 'tarjeta-icon-amarilla' : 'tarjeta-icon-roja'}></span>
+                  {card?.jugador} <small>({card?.minuto}')</small>
+                </span>
+                <span className="equipo-nombre">{card?.equipo}</span>
               </li>
             ))}
           </ul>

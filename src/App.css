@@ -600,3 +600,36 @@
     font-size: 0.75rem;
   }
 }
+
+/* Tarjetas Amarillas y Rojas */
+.tarjeta-icon-amarilla, 
+.tarjeta-icon-roja {
+  display: inline-block;
+  width: 9px;
+  height: 13px;
+  border-radius: 2px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.tarjeta-icon-amarilla {
+  background-color: #facc15;
+  box-shadow: 0 0 4px rgba(250, 204, 21, 0.5);
+}
+
+.tarjeta-icon-roja {
+  background-color: #ef4444;
+  box-shadow: 0 0 4px rgba(239, 68, 68, 0.5);
+}
+
+.tag-tipo {
+  color: var(--texto-secundario);
+  font-size: 0.72rem;
+  font-weight: normal;
+}
+
+.footer-tarjetas {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dotted var(--borde-color);
+}
